@@ -256,14 +256,14 @@ with shared.gradio_root:
                         )
 
                 with gr.Column(scale=16):
-                    prompt = gr.Textbox(show_label=False, placeholder="Type prompt here or paste parameters.", elem_id='positive_prompt',
+                    prompt = gr.Textbox(label="+ Positive Prompt:", show_label=True, placeholder="Type prompt here or paste parameters.", elem_id='positive_prompt',
                                         autofocus=True, lines=3)
 
                     default_prompt = modules.config.default_prompt
                     if isinstance(default_prompt, str) and default_prompt != '':
                         shared.gradio_root.load(lambda: default_prompt, outputs=prompt)
 
-                    negative_prompt = gr.Textbox(show_label=False, placeholder="Type negative prompt here.",
+                    negative_prompt = gr.Textbox(label="- Negative Prompt:", show_label=True, placeholder="Type negative prompt here.",
                                                  lines=3, elem_id='negative_prompt',
                                                  value=modules.config.default_prompt_negative)
 

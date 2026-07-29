@@ -553,7 +553,7 @@ html.dark-mode ::selection {
     min-width: 48px !important;
     max-width: 220px !important;
     align-self: flex-start !important;
-    margin-top: 2px !important;
+    margin-top: 26px !important;
 }
 
 #wildcard_accordion {
