@@ -649,7 +649,7 @@ html.dark-mode ::selection {
     color: #ffffff !important;
 }
 
-/* ── Wildcard Icon & Checklist (Vertical Scrolling Popover) ──────────────── */
+/* ── Wildcard Icon & Checklist (High-Contrast Floating Popover) ──────────── */
 #wildcard_col {
     min-width: 48px !important;
     max-width: 320px !important;
@@ -660,9 +660,9 @@ html.dark-mode ::selection {
 }
 
 #wildcard_accordion {
-    border: 1px solid var(--border-color-primary, #4b5563) !important;
-    border-radius: 6px !important;
-    background: var(--background-fill-secondary, #222630) !important;
+    border: 1px solid #4b5563 !important;
+    border-radius: 8px !important;
+    background: #2d3342 !important;
     padding: 0 !important;
     min-width: 48px !important;
     position: relative !important;
@@ -673,30 +673,50 @@ html.dark-mode ::selection {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    min-width: 260px !important;
-    width: 260px !important;
+    min-width: 270px !important;
+    width: 270px !important;
     z-index: 999999 !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
-    background: var(--background-fill-primary, #1e222b) !important;
+    border: 2px solid #64748b !important;
+    border-radius: 8px !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    background: #2d3342 !important;
+}
+
+html.dark-mode #wildcard_accordion,
+html.dark-mode #wildcard_accordion[open] {
+    background: #2d3342 !important;
+    background-color: #2d3342 !important;
+    border: 2px solid #64748b !important;
+    color: #f3f4f6 !important;
 }
 
 #wildcard_accordion > .label-wrap {
-    padding: 6px 10px !important;
+    padding: 8px 12px !important;
     font-size: 18px !important;
     font-weight: bold !important;
     cursor: pointer !important;
     justify-content: center !important;
+    background: #374151 !important;
+    border-top-left-radius: 6px !important;
+    border-top-right-radius: 6px !important;
+    border-bottom: 1px solid #4b5563 !important;
 }
 
 #wildcard_checkboxes {
     max-height: 280px !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    padding: 8px 12px !important;
+    padding: 8px !important;
     display: flex !important;
     flex-direction: column !important;
     flex-wrap: nowrap !important;
-    gap: 6px !important;
+    gap: 4px !important;
+    background: #2d3342 !important;
+}
+
+html.dark-mode #wildcard_checkboxes {
+    background: #2d3342 !important;
+    background-color: #2d3342 !important;
 }
 
 #wildcard_checkboxes > div,
@@ -708,6 +728,7 @@ html.dark-mode ::selection {
     flex-wrap: nowrap !important;
     width: 100% !important;
     gap: 4px !important;
+    background: transparent !important;
 }
 
 #wildcard_checkboxes label {
@@ -715,7 +736,42 @@ html.dark-mode ::selection {
     align-items: center !important;
     width: 100% !important;
     font-size: 13px !important;
-    padding: 4px 6px !important;
+    padding: 6px 10px !important;
     cursor: pointer !important;
     white-space: nowrap !important;
+    border-radius: 6px !important;
+    background: #222630 !important;
+    border: 1px solid #3b4252 !important;
+    color: #f3f4f6 !important;
+    transition: background-color 0.15s ease !important;
+}
+
+#wildcard_checkboxes label:hover {
+    background-color: #434c5e !important;
+    color: #ffffff !important;
+    border-color: #88c0d0 !important;
+}
+
+#wildcard_checkboxes input[type="checkbox"] {
+    accent-color: #60a5fa !important;
+    margin-right: 8px !important;
+}
+
+/* Custom scrollbar for wildcard popout list */
+#wildcard_checkboxes::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+#wildcard_checkboxes::-webkit-scrollbar-track {
+    background: #222630 !important;
+    border-radius: 4px !important;
+}
+
+#wildcard_checkboxes::-webkit-scrollbar-thumb {
+    background: #4c566a !important;
+    border-radius: 4px !important;
+}
+
+#wildcard_checkboxes::-webkit-scrollbar-thumb:hover {
+    background: #64748b !important;
 }
