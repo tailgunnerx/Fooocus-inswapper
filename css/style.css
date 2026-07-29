@@ -456,7 +456,7 @@ html.dark-mode #dark_mode_btn button {
 /* ── Top Bar Open Output Folder Button ────────────────────────────────────── */
 #open_folder_btn_top {
     min-width: 140px !important;
-    max-width: 170px !important;
+    max-width: 175px !important;
     height: 34px !important;
     font-size: 12px !important;
     font-weight: 600 !important;
@@ -464,15 +464,21 @@ html.dark-mode #dark_mode_btn button {
     border-radius: 6px !important;
 }
 
-html.dark-mode #open_folder_btn_top {
-    background-color: #27272a !important;
-    color: #f4f4f5 !important;
-    border: 1px solid #3f3f46 !important;
+html.dark-mode #open_folder_btn_top,
+html.dark-mode #open_folder_btn_top button,
+html.dark-mode .open_folder_btn,
+html.dark-mode .open_folder_btn button {
+    background-color: #9ca3af !important;
+    color: #111827 !important;
+    border: 1px solid #6b7280 !important;
+    font-weight: 700 !important;
 }
 
-html.dark-mode #open_folder_btn_top:hover {
-    background-color: #3f3f46 !important;
-    color: #ffffff !important;
+html.dark-mode #open_folder_btn_top:hover,
+html.dark-mode #open_folder_btn_top:hover button,
+html.dark-mode .open_folder_btn:hover {
+    background-color: #cbd5e1 !important;
+    color: #0f172a !important;
 }
 
 /* ── Whole-Screen Dark Theme (Grayscale Slate Palette, Identical Layout) ────── */
@@ -625,7 +631,7 @@ html.dark-mode ::selection {
     color: #ffffff !important;
 }
 
-/* ── Wildcard Icon & Checklist (Floating Popover over Prompt Boxes) ───────── */
+/* ── Wildcard Icon & Checklist (Vertical Scrolling Popover) ──────────────── */
 #wildcard_col {
     min-width: 48px !important;
     max-width: 320px !important;
@@ -649,8 +655,8 @@ html.dark-mode ::selection {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    min-width: 280px !important;
-    width: 280px !important;
+    min-width: 260px !important;
+    width: 260px !important;
     z-index: 999999 !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
     background: var(--background-fill-primary, #1e222b) !important;
@@ -667,14 +673,31 @@ html.dark-mode ::selection {
 #wildcard_checkboxes {
     max-height: 280px !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     padding: 8px 12px !important;
-    min-width: 260px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
 }
 
-#wildcard_checkboxes label,
-#wildcard_checkboxes span {
+#wildcard_checkboxes > div,
+#wildcard_checkboxes .wrap,
+#wildcard_checkboxes [data-testid="checkbox-group"],
+#wildcard_checkboxes .checkbox-group {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    gap: 4px !important;
+}
+
+#wildcard_checkboxes label {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
     font-size: 13px !important;
-    padding: 3px 6px !important;
+    padding: 4px 6px !important;
     cursor: pointer !important;
     white-space: nowrap !important;
 }
