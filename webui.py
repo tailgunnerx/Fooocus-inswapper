@@ -179,17 +179,9 @@ if isinstance(args_manager.args.preset, str):
     title += ' ' + args_manager.args.preset
 
 shared.gradio_root = gr.Blocks(title=title, css="""
-/* ── Dark Mode theme ──────────────────────────────────────────────────────── */
-.dark-mode { filter: invert(1) hue-rotate(180deg); }
-.dark-mode img,
-.dark-mode video,
-.dark-mode canvas,
-.dark-mode [class*='gallery'],
-.dark-mode [data-testid='image'] { filter: invert(1) hue-rotate(180deg); }
 /* ── Custom size row ──────────────────────────────────────────────────────── */
 #custom_size_row { gap: 8px; align-items: flex-end; margin-top: 8px; }
 #apply_custom_size { min-width: 120px; }
-#dark_mode_btn { min-width: 42px; font-size: 18px; }
 """).queue()
 
 with shared.gradio_root:

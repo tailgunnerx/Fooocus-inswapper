@@ -417,20 +417,25 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
   background: none;
 }
 
-/* /* ── Floating Night Mode Button (Top-Left Corner, Fixed Gray Accent Toggle) ─ */
-#dark_mode_btn {
+/* ── Floating Night Mode Button (Fixed Top-Left Toggle, 0px Shift) ────────── */
+#dark_mode_btn,
+#dark_mode_btn button,
+html.dark-mode #dark_mode_btn,
+html.dark-mode #dark_mode_btn button {
     position: fixed !important;
     top: 12px !important;
     left: 12px !important;
-    z-index: 999999 !important;
+    z-index: 9999999 !important;
     width: 38px !important;
     height: 38px !important;
     min-width: 38px !important;
     max-width: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
     border-radius: 50% !important;
-    background-color: #4b5563 !important;
+    background-color: #374151 !important;
     color: #f3f4f6 !important;
-    border: 1px solid #6b7280 !important;
+    border: 1px solid #4b5563 !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
     font-size: 18px !important;
     display: flex !important;
@@ -439,26 +444,35 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
     padding: 0 !important;
     margin: 0 !important;
     cursor: pointer !important;
-    transition: background-color 0.2s ease, transform 0.2s ease !important;
+    flex-shrink: 0 !important;
 }
 
-#dark_mode_btn:hover {
-    background-color: #6b7280 !important;
-    border-color: #9ca3af !important;
-    transform: scale(1.05) !important;
+#dark_mode_btn:hover,
+#dark_mode_btn:hover button {
+    background-color: #4b5563 !important;
+    border-color: #6b7280 !important;
 }
 
-#dark_mode_btn button {
-    background: transparent !important;
-    border: none !important;
-    color: #f3f4f6 !important;
-    font-size: 18px !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    cursor: pointer !important;
+/* ── Top Bar Open Output Folder Button ────────────────────────────────────── */
+#open_folder_btn_top {
+    min-width: 140px !important;
+    max-width: 170px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+}
+
+html.dark-mode #open_folder_btn_top {
+    background-color: #27272a !important;
+    color: #f4f4f5 !important;
+    border: 1px solid #3f3f46 !important;
+}
+
+html.dark-mode #open_folder_btn_top:hover {
+    background-color: #3f3f46 !important;
+    color: #ffffff !important;
 }
 
 /* ── Whole-Screen Dark Theme (Grayscale Slate Palette, Identical Layout) ────── */
@@ -492,18 +506,25 @@ html.dark-mode *:after {
     border-color: #333846 !important;
 }
 
-/* Grayscale dark panels, tabs, blocks, and accordions */
+/* All inner columns, panels, forms, blocks, tabs, and accordions */
 html.dark-mode div,
 html.dark-mode section,
 html.dark-mode main,
 html.dark-mode header,
 html.dark-mode footer,
+html.dark-mode form,
+html.dark-mode fieldset,
 html.dark-mode [class*='block'],
 html.dark-mode [class*='panel'],
+html.dark-mode [class*='column'],
+html.dark-mode [class*='form'],
+html.dark-mode [class*='row'],
 html.dark-mode [class*='tab'],
-html.dark-mode [class*='accordion'] {
+html.dark-mode [class*='accordion'],
+html.dark-mode [class*='group'] {
     background-color: #222630 !important;
     color: #d1d5db !important;
+    border-color: #333846 !important;
 }
 
 /* Transparent label text backgrounds (no gray highlight blocks behind labels) */
@@ -555,39 +576,39 @@ html.dark-mode video {
     filter: none !important;
 }
 
-/* Action buttons in Dark Mode */
+/* Generate, Stop, Skip & Action Buttons in Dark Mode */
 html.dark-mode #generate_button,
+html.dark-mode #generate_button *,
+html.dark-mode #generate_button button,
 html.dark-mode #stop_button,
+html.dark-mode #stop_button *,
 html.dark-mode #skip_button,
+html.dark-mode #skip_button *,
 html.dark-mode #reset_button,
+html.dark-mode #reset_button *,
 html.dark-mode .type_row,
+html.dark-mode .type_row *,
 html.dark-mode .type_row_half,
+html.dark-mode .type_row_half *,
 html.dark-mode button.primary,
 html.dark-mode button[variant='primary'] {
     background-color: #374151 !important;
     color: #f3f4f6 !important;
-    border: 1px solid #4b5563 !important;
+    border-color: #4b5563 !important;
     box-shadow: none !important;
     text-shadow: none !important;
 }
 
-html.dark-mode #generate_button button,
-html.dark-mode #stop_button button,
-html.dark-mode #skip_button button,
-html.dark-mode #reset_button button,
-html.dark-mode .type_row button,
-html.dark-mode .type_row_half button {
-    background: transparent !important;
-    color: #f3f4f6 !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
 html.dark-mode #generate_button:hover,
+html.dark-mode #generate_button:hover *,
 html.dark-mode #stop_button:hover,
+html.dark-mode #stop_button:hover *,
 html.dark-mode #skip_button:hover,
+html.dark-mode #skip_button:hover *,
 html.dark-mode .type_row:hover,
-html.dark-mode .type_row_half:hover {
+html.dark-mode .type_row:hover *,
+html.dark-mode .type_row_half:hover,
+html.dark-mode .type_row_half:hover * {
     background-color: #4b5563 !important;
     color: #ffffff !important;
 }
@@ -599,43 +620,8 @@ html.dark-mode .gr-button {
     border: 1px solid #374151 !important;
 }
 
-html.dark-mode #dark_mode_btn,
-html.dark-mode #dark_mode_btn button {
-    background-color: #374151 !important;
-    color: #f3f4f6 !important;
-    border-color: #4b5563 !important;
-}
-
 html.dark-mode ::selection {
     background: #374151 !important;
-    color: #ffffff !important;
-}
-
-html.dark-mode #generate_button:hover,
-html.dark-mode #stop_button:hover,
-html.dark-mode #skip_button:hover,
-html.dark-mode .type_row:hover,
-html.dark-mode .type_row_half:hover {
-    background-color: #4b5563 !important;
-    color: #ffffff !important;
-}
-
-html.dark-mode button,
-html.dark-mode .gr-button {
-    background-color: #27272a !important;
-    color: #e4e4e7 !important;
-    border: 1px solid #3f3f46 !important;
-}
-
-html.dark-mode #dark_mode_btn,
-html.dark-mode #dark_mode_btn button {
-    background-color: #3f3f46 !important;
-    color: #f4f4f5 !important;
-    border-color: #52525b !important;
-}
-
-html.dark-mode ::selection {
-    background: #3f3f46 !important;
     color: #ffffff !important;
 }
 
