@@ -461,20 +461,21 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
     cursor: pointer !important;
 }
 
-/* ── Whole-Screen Dark Grayscale Theme (No Layout Shift) ──────────────────── */
+/* ── Whole-Screen Pitch-Black Dark Theme (No Pulsing/Flickering) ───────────── */
 html.dark-mode {
-    filter: grayscale(100%) !important;
-    background-color: #121212 !important;
+    background-color: #000000 !important;
     color: #e0e0e0 !important;
 }
 
 html.dark-mode body,
+html.dark-mode #root,
+html.dark-mode .gradio-container,
 body.dark-mode {
-    background-color: #121212 !important;
+    background-color: #000000 !important;
     color: #e0e0e0 !important;
 }
 
-/* Fix outer perimeter and component backgrounds without shifting layout */
+/* Outer perimeter and component borders */
 html.dark-mode *,
 html.dark-mode *:before,
 html.dark-mode *:after {
@@ -490,7 +491,7 @@ html.dark-mode [class*='block'],
 html.dark-mode [class*='panel'],
 html.dark-mode [class*='tab'],
 html.dark-mode [class*='accordion'] {
-    background-color: #18181b !important;
+    background-color: #121212 !important;
     color: #d4d4d8 !important;
 }
 
@@ -514,13 +515,13 @@ html.dark-mode #positive_prompt,
 html.dark-mode #negative_prompt,
 html.dark-mode #positive_prompt textarea,
 html.dark-mode #negative_prompt textarea {
-    background-color: #121212 !important;
+    background-color: #000000 !important;
     color: #f4f4f5 !important;
     border: 1px solid #3f3f46 !important;
     box-shadow: none !important;
 }
 
-/* Image Preview & Gallery Containers Dark Background */
+/* Image Preview & Gallery Containers Pure Black Background */
 html.dark-mode .main_view,
 html.dark-mode #final_gallery,
 html.dark-mode .image_gallery,
@@ -531,22 +532,15 @@ html.dark-mode .gallery-item,
 html.dark-mode [elem_id="final_gallery"],
 html.dark-mode .preview,
 html.dark-mode .media-wrapper {
-    background-color: #121212 !important;
-    background: #121212 !important;
+    background-color: #000000 !important;
+    background: #000000 !important;
     border-color: #27272a !important;
 }
 
-/* Keep image previews, gallery images, thumbnails, and canvas elements in full color */
+/* Keep images, canvas, and video in original color without filter artifacts */
 html.dark-mode img,
 html.dark-mode canvas,
-html.dark-mode .gallery img,
-html.dark-mode .gallery-item img,
-html.dark-mode .main_view img,
-html.dark-mode .image_gallery img,
-html.dark-mode #final_gallery img,
-html.dark-mode [elem_id="final_gallery"] img,
-html.dark-mode .preview img,
-html.dark-mode .thumbnail-item img {
+html.dark-mode video {
     filter: none !important;
 }
 
