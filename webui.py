@@ -35,6 +35,21 @@ def get_task(*args):
     args.pop(0)
     return worker.AsyncTask(args=args)
 
+def open_output_folder():
+    import platform
+    import subprocess
+    path = os.path.abspath(modules.config.path_outputs)
+    os.makedirs(path, exist_ok=True)
+    try:
+        if platform.system() == "Windows":
+            os.startfile(path)
+        elif platform.system() == "Darwin":
+            subprocess.Popen(["open", path])
+        else:
+            subprocess.Popen(["xdg-open", path])
+    except Exception as e:
+        print(f"[Open Folder] Error opening directory '{path}': {e}")
+
 def generate_clicked(task: worker.AsyncTask):
     import ldm_patched.modules.model_management as model_management
 
@@ -182,15 +197,17 @@ with shared.gradio_root:
     inpaint_engine_state = gr.State('empty')
     # ── Top bar: title + open output folder + dark mode toggle ───────────────
     with gr.Row(elem_id='top_bar_row'):
-        outputs_path_abs = os.path.abspath(modules.config.path_outputs)
         gr.HTML(
             f'<div style="display:flex;align-items:center;gap:14px;padding:6px 0;margin-left:44px;">'
             f'<span style="font-size:1.4em;font-weight:700;letter-spacing:.5px;">'
-            f'🎨 Fooocus-inswapper</span>'
-            f'<a href="file={outputs_path_abs}" target="_blank" style="font-size:0.85em;font-weight:600;color:#60a5fa;text-decoration:none;padding:4px 10px;border:1px solid #3b82f6;border-radius:6px;background:rgba(59,130,246,0.1);">'
-            f'📁 Open Output Folder</a>'
-            f'</div>'
+            f'🎨 Fooocus-inswapper</span></div>'
         )
+        open_folder_btn_top = gr.Button(
+            value='📁 Open Output Folder', size='sm', variant='secondary',
+            elem_id='open_folder_btn_top'
+        )
+        open_folder_btn_top.click(open_output_folder, queue=False, show_progress=False)
+
         dark_mode_btn = gr.Button(
             value='🌙', elem_id='dark_mode_btn', variant='secondary',
             size='sm'
@@ -1018,13 +1035,16 @@ with shared.gradio_root:
                                    queue=False, show_progress=False)
 
                 def update_history_link():
-                    outputs_path_abs = os.path.abspath(modules.config.path_outputs)
-                    history_link_html = f'<a href="file={get_current_html_path(output_format)}" target="_blank" style="text-decoration:none;font-weight:600;color:#60a5fa;">📚 History Log</a>' if not args_manager.args.disable_image_log else ''
-                    folder_link_html = f'<a href="file={outputs_path_abs}" target="_blank" style="text-decoration:none;font-weight:600;color:#34d399;">📁 Open Output Folder</a>'
-                    return gr.update(value=f'<div style="display:flex;gap:16px;align-items:center;margin-top:8px;">{history_link_html}{folder_link_html}</div>')
+                    if args_manager.args.disable_image_log:
+                        return gr.update(value='')
+                    return gr.update(value=f'<a href="file={get_current_html_path(output_format)}" target="_blank" style="text-decoration:none;font-weight:600;color:#60a5fa;">📚 History Log</a>')
 
                 history_link = gr.HTML()
                 shared.gradio_root.load(update_history_link, outputs=history_link, queue=False, show_progress=False)
+
+                with gr.Row():
+                    open_folder_btn_settings = gr.Button(value='📁 Open Output Folder', size='sm', variant='secondary')
+                    open_folder_btn_settings.click(open_output_folder, queue=False, show_progress=False)
 
             with gr.Tab(label='Styles', elem_classes=['style_selections_tab']):
                 style_sorter.try_load_sorted_styles(
@@ -1077,12 +1097,11 @@ with shared.gradio_root:
                                          inputs=refiner_model, outputs=refiner_switch, show_progress=False, queue=False)
 
                 with gr.Accordion("🧪 Multi-Model Checkpoint Comparison (Batch Test Models)", open=False):
-                    outputs_path_abs = os.path.abspath(modules.config.path_outputs)
                     gr.HTML(f'<div style="font-size:0.85em;color:#aaa;margin-bottom:8px;">'
                             f'Select model checkpoints below to generate images across all selected models using your current prompt and settings.<br/>'
-                            f'Outputs are saved into a dedicated comparison folder for today with <code>positive_prompt.txt</code>, '
-                            f'<code>negative_prompt.txt</code>, and images named by model. '
-                            f'<a href="file={outputs_path_abs}" target="_blank" style="color:#60a5fa;font-weight:600;margin-left:6px;">📁 Open Output Folder</a></div>')
+                            f'Outputs are saved into a dedicated comparison folder for today with HTML comparison log.</div>')
+                    open_folder_btn_comp = gr.Button(value='📁 Open Output Folder', size='sm', variant='secondary')
+                    open_folder_btn_comp.click(open_output_folder, queue=False, show_progress=False)
                     
                     model_comparison_checkboxes = gr.CheckboxGroup(
                         label='Select Models to Compare',
