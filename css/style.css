@@ -417,43 +417,42 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
   background: none;
 }
 
-/* ── Floating Night Mode Button (Top-Left Corner, Gray Accent) ────────────── */
+/* /* ── Floating Night Mode Button (Top-Left Corner, Fixed Gray Accent Toggle) ─ */
 #dark_mode_btn {
     position: fixed !important;
     top: 12px !important;
     left: 12px !important;
     z-index: 999999 !important;
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    max-width: 36px !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
     border-radius: 50% !important;
     background-color: #4b5563 !important;
-    color: #ffffff !important;
+    color: #f3f4f6 !important;
     border: 1px solid #6b7280 !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     padding: 0 !important;
     margin: 0 !important;
     cursor: pointer !important;
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+    transition: background-color 0.2s ease, transform 0.2s ease !important;
 }
 
 #dark_mode_btn:hover {
     background-color: #6b7280 !important;
     border-color: #9ca3af !important;
-    transform: scale(1.08) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    transform: scale(1.05) !important;
 }
 
 #dark_mode_btn button {
     background: transparent !important;
     border: none !important;
-    color: #ffffff !important;
-    font-size: 16px !important;
+    color: #f3f4f6 !important;
+    font-size: 18px !important;
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -463,32 +462,41 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
 }
 
 /* ── Whole-Screen Dark Grayscale Theme ────────────────────────────────────── */
-html.dark-mode,
-body.dark-mode,
-.dark-mode {
+html.dark-mode {
     filter: grayscale(100%) !important;
     background-color: #121212 !important;
     color: #e0e0e0 !important;
 }
 
-.dark-mode .gradio-container,
-.dark-mode .gradio-container * {
-    color-scheme: dark !important;
+html.dark-mode body,
+html.dark-mode #root,
+html.dark-mode .gradio-container,
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
 }
 
-html.dark-mode body,
-html.dark-mode .gradio-container,
+html.dark-mode *,
+html.dark-mode *:before,
+html.dark-mode *:after {
+    border-color: #374151 !important;
+}
+
 html.dark-mode div,
-html.dark-mode fieldset,
-html.dark-mode label,
-html.dark-mode span,
+html.dark-mode section,
+html.dark-mode main,
+html.dark-mode header,
+html.dark-mode footer,
 html.dark-mode [class*='block'],
 html.dark-mode [class*='panel'],
 html.dark-mode [class*='tab'],
 html.dark-mode [class*='accordion'] {
     background-color: #1a1a1a !important;
     color: #d1d5db !important;
-    border-color: #374151 !important;
 }
 
 html.dark-mode input,
@@ -501,31 +509,76 @@ html.dark-mode #negative_prompt {
     border: 1px solid #4b5563 !important;
 }
 
-/* Ensure floating button remains gray accent */
-html.dark-mode #dark_mode_btn {
+/* Grayscale Generate button & primary action buttons in dark mode */
+html.dark-mode #generate_button,
+html.dark-mode .type_row,
+html.dark-mode button.primary,
+html.dark-mode button[variant='primary'] {
     background-color: #4b5563 !important;
+    color: #f3f4f6 !important;
+    border: 1px solid #6b7280 !important;
+    filter: grayscale(100%) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+html.dark-mode #generate_button:hover,
+html.dark-mode .type_row:hover,
+html.dark-mode button.primary:hover {
+    background-color: #6b7280 !important;
+    color: #ffffff !important;
+}
+
+html.dark-mode button,
+html.dark-mode .gr-button {
+    background-color: #374151 !important;
+    color: #e5e7eb !important;
+    border: 1px solid #4b5563 !important;
+}
+
+html.dark-mode #dark_mode_btn,
+html.dark-mode #dark_mode_btn button {
+    background-color: #4b5563 !important;
+    color: #f3f4f6 !important;
     border-color: #6b7280 !important;
 }
 
-/* ── Wildcard Dropdown List Button (Left side of Pos Prompt) ──────────────── */
+html.dark-mode ::selection {
+    background: #4b5563 !important;
+    color: #ffffff !important;
+}
+
+/* ── Wildcard Icon & Checklist (Left side of Pos Prompt) ──────────────────── */
 #wildcard_col {
-    min-width: 110px !important;
-    max-width: 140px !important;
+    min-width: 48px !important;
+    max-width: 220px !important;
     align-self: flex-start !important;
     margin-top: 2px !important;
 }
 
-#wildcard_dropdown {
-    width: 100% !important;
+#wildcard_accordion {
+    border: 1px solid var(--border-color-primary, #4b5563) !important;
+    border-radius: 6px !important;
+    background: var(--background-fill-secondary, #374151) !important;
+    padding: 0 !important;
 }
 
-#wildcard_dropdown input,
-#wildcard_dropdown select,
-#wildcard_dropdown .wrap {
+#wildcard_accordion > .label-wrap {
+    padding: 6px 10px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    justify-content: center !important;
+}
+
+#wildcard_checkboxes {
+    max-height: 250px !important;
+    overflow-y: auto !important;
+    padding: 8px !important;
+}
+
+#wildcard_checkboxes label {
     font-size: 13px !important;
-    font-weight: 600 !important;
-    padding: 6px 8px !important;
-    height: 38px !important;
-    border-radius: 6px !important;
+    padding: 3px 6px !important;
     cursor: pointer !important;
 }
