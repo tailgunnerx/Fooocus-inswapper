@@ -649,61 +649,78 @@ html.dark-mode ::selection {
     color: #ffffff !important;
 }
 
-/* ── Wildcard Icon & Checklist (High-Contrast Floating Popover) ──────────── */
+/* ── Wildcard Icon & Checklist ────────────────────────────────────────────── */
 #wildcard_col {
     min-width: 48px !important;
-    max-width: 320px !important;
+    max-width: 60px !important;
     align-self: flex-start !important;
     margin-top: 26px !important;
     position: relative !important;
     z-index: 99999 !important;
 }
 
+/* Collapsed state — just the icon, light bg */
 #wildcard_accordion {
-    border: 1px solid #4b5563 !important;
+    border: 1px solid #d1d5db !important;
     border-radius: 8px !important;
-    background: #2d3342 !important;
+    background: #f9fafb !important;
     padding: 0 !important;
     min-width: 48px !important;
     position: relative !important;
     z-index: 99999 !important;
 }
 
+/* Open/expanded — absolute popout card, light mode */
 #wildcard_accordion[open] {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    min-width: 380px !important;
-    width: 380px !important;
+    min-width: 420px !important;
+    width: 420px !important;
     z-index: 999999 !important;
-    border: 2px solid #64748b !important;
+    border: 2px solid #9ca3af !important;
     border-radius: 8px !important;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 4px 12px rgba(0, 0, 0, 0.4) !important;
-    background: #2d3342 !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    background: #ffffff !important;
 }
 
-html.dark-mode #wildcard_accordion,
+/* Dark mode overrides for accordion */
+html.dark-mode #wildcard_accordion {
+    background: #2d3342 !important;
+    border-color: #4b5563 !important;
+}
+
 html.dark-mode #wildcard_accordion[open] {
     background: #2d3342 !important;
     background-color: #2d3342 !important;
     border: 2px solid #64748b !important;
     color: #f3f4f6 !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
+/* Header row inside accordion — light mode */
 #wildcard_accordion > .label-wrap {
     padding: 8px 12px !important;
     font-size: 18px !important;
     font-weight: bold !important;
     cursor: pointer !important;
     justify-content: center !important;
-    background: #374151 !important;
+    background: #f3f4f6 !important;
     border-top-left-radius: 6px !important;
     border-top-right-radius: 6px !important;
-    border-bottom: 1px solid #4b5563 !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    color: #111827 !important;
 }
 
+html.dark-mode #wildcard_accordion > .label-wrap {
+    background: #374151 !important;
+    border-bottom: 1px solid #4b5563 !important;
+    color: #f3f4f6 !important;
+}
+
+/* Scrollable checkbox list — light mode */
 #wildcard_checkboxes {
-    max-height: 280px !important;
+    max-height: 300px !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     padding: 8px !important;
@@ -711,7 +728,7 @@ html.dark-mode #wildcard_accordion[open] {
     flex-direction: column !important;
     flex-wrap: nowrap !important;
     gap: 4px !important;
-    background: #2d3342 !important;
+    background: #ffffff !important;
 }
 
 html.dark-mode #wildcard_checkboxes {
@@ -731,49 +748,97 @@ html.dark-mode #wildcard_checkboxes {
     background: transparent !important;
 }
 
+/* Each row item — light mode */
 #wildcard_checkboxes label {
     display: flex !important;
     align-items: center !important;
     width: 100% !important;
+    box-sizing: border-box !important;
     font-size: 13px !important;
     padding: 6px 10px !important;
     cursor: pointer !important;
     white-space: nowrap !important;
     border-radius: 6px !important;
-    background: #222630 !important;
-    border: 1px solid #3b4252 !important;
-    color: #f3f4f6 !important;
-    transition: background-color 0.15s ease !important;
+    background: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    color: #111827 !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease !important;
 }
 
 #wildcard_checkboxes label:hover {
-    background-color: #434c5e !important;
-    color: #ffffff !important;
-    border-color: #88c0d0 !important;
+    background: #fff7ed !important;
+    border-color: #f97316 !important;
+    color: #9a3412 !important;
 }
 
+/* Dark mode row items */
+html.dark-mode #wildcard_checkboxes label {
+    background: #222630 !important;
+    border: 1px solid #3b4252 !important;
+    color: #f3f4f6 !important;
+}
+
+html.dark-mode #wildcard_checkboxes label:hover {
+    background-color: #434c5e !important;
+    color: #ffffff !important;
+    border-color: #f97316 !important;
+}
+
+/* Orange checkbox accent in both modes */
 #wildcard_checkboxes input[type="checkbox"] {
     accent-color: #f97316 !important;
     margin-right: 8px !important;
     width: 15px !important;
     height: 15px !important;
+    flex-shrink: 0 !important;
 }
 
-/* Custom scrollbar for wildcard popout list */
-#wildcard_checkboxes::-webkit-scrollbar {
-    width: 8px !important;
+/* Scrollbar — light mode */
+#wildcard_checkboxes::-webkit-scrollbar { width: 8px !important; }
+#wildcard_checkboxes::-webkit-scrollbar-track { background: #f3f4f6 !important; border-radius: 4px !important; }
+#wildcard_checkboxes::-webkit-scrollbar-thumb { background: #d1d5db !important; border-radius: 4px !important; }
+#wildcard_checkboxes::-webkit-scrollbar-thumb:hover { background: #f97316 !important; }
+
+/* Dark mode scrollbar */
+html.dark-mode #wildcard_checkboxes::-webkit-scrollbar-track { background: #222630 !important; }
+html.dark-mode #wildcard_checkboxes::-webkit-scrollbar-thumb { background: #4c566a !important; }
+html.dark-mode #wildcard_checkboxes::-webkit-scrollbar-thumb:hover { background: #f97316 !important; }
+
+/* ── Generate Button — Orange in both light and dark mode ────────────────── */
+#generate_button,
+#generate_button button {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+    background-color: #f97316 !important;
+    color: #ffffff !important;
+    border: 1px solid #c2410c !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4) !important;
+    text-shadow: none !important;
 }
 
-#wildcard_checkboxes::-webkit-scrollbar-track {
-    background: #222630 !important;
-    border-radius: 4px !important;
+#generate_button:hover,
+#generate_button:hover button {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+    background-color: #ea580c !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.6) !important;
 }
 
-#wildcard_checkboxes::-webkit-scrollbar-thumb {
-    background: #4c566a !important;
-    border-radius: 4px !important;
+html.dark-mode #generate_button,
+html.dark-mode #generate_button *,
+html.dark-mode #generate_button button {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+    background-color: #f97316 !important;
+    color: #ffffff !important;
+    border: 1px solid #c2410c !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.5) !important;
+    text-shadow: none !important;
 }
 
-#wildcard_checkboxes::-webkit-scrollbar-thumb:hover {
-    background: #64748b !important;
+html.dark-mode #generate_button:hover,
+html.dark-mode #generate_button:hover * {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+    background-color: #ea580c !important;
+    color: #ffffff !important;
 }
