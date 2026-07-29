@@ -298,22 +298,22 @@ with shared.gradio_root:
                     queue=False, show_progress=False
                 )
 
-                    def stop_clicked(currentTask):
-                        import ldm_patched.modules.model_management as model_management
-                        currentTask.last_stop = 'stop'
-                        if (currentTask.processing):
-                            model_management.interrupt_current_processing()
-                        return currentTask
+                def stop_clicked(currentTask):
+                    import ldm_patched.modules.model_management as model_management
+                    currentTask.last_stop = 'stop'
+                    if (currentTask.processing):
+                        model_management.interrupt_current_processing()
+                    return currentTask
 
-                    def skip_clicked(currentTask):
-                        import ldm_patched.modules.model_management as model_management
-                        currentTask.last_stop = 'skip'
-                        if (currentTask.processing):
-                            model_management.interrupt_current_processing()
-                        return currentTask
+                def skip_clicked(currentTask):
+                    import ldm_patched.modules.model_management as model_management
+                    currentTask.last_stop = 'skip'
+                    if (currentTask.processing):
+                        model_management.interrupt_current_processing()
+                    return currentTask
 
-                    stop_button.click(stop_clicked, inputs=currentTask, outputs=currentTask, queue=False, show_progress=False, _js='cancelGenerateForever')
-                    skip_button.click(skip_clicked, inputs=currentTask, outputs=currentTask, queue=False, show_progress=False)
+                stop_button.click(stop_clicked, inputs=currentTask, outputs=currentTask, queue=False, show_progress=False, _js='cancelGenerateForever')
+                skip_button.click(skip_clicked, inputs=currentTask, outputs=currentTask, queue=False, show_progress=False)
             with gr.Row(elem_classes='advanced_check_row'):
                 input_image_checkbox = gr.Checkbox(label='Input Image', value=False, container=False, elem_classes='min_check')
                 enhance_checkbox = gr.Checkbox(label='Enhance', value=modules.config.default_enhance_checkbox, container=False, elem_classes='min_check')
