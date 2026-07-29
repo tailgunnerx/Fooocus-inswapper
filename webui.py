@@ -854,6 +854,11 @@ with shared.gradio_root:
                                                  value=modules.config.default_performance,
                                                  elem_classes=['performance_selection'])
 
+                overwrite_step = gr.Slider(label='Custom Sampling Steps (-1 = use Performance default)',
+                                           minimum=-1, maximum=200, step=1,
+                                           value=modules.config.default_overwrite_step,
+                                           info='Set to -1 to use default steps for selected Performance mode, or enter 1–200 custom steps.')
+
                 with gr.Accordion(label='Aspect Ratios', open=False, elem_id='aspect_ratios_accordion') as aspect_ratios_accordion:
                     custom_aspect_ratio_label = 'Custom'
                     aspect_ratio_choices = modules.config.available_aspect_ratios_labels + [custom_aspect_ratio_label]
@@ -1058,11 +1063,6 @@ with shared.gradio_root:
                         generate_image_grid = gr.Checkbox(label='Generate Image Grid for Each Batch',
                                                           info='(Experimental) This may cause performance problems on some computers and certain internet conditions.',
                                                           value=False)
-
-                        overwrite_step = gr.Slider(label='Forced Overwrite of Sampling Step',
-                                                   minimum=-1, maximum=200, step=1,
-                                                   value=modules.config.default_overwrite_step,
-                                                   info='Set as -1 to disable. For developer debugging.')
                         overwrite_switch = gr.Slider(label='Forced Overwrite of Refiner Switch Step',
                                                      minimum=-1, maximum=200, step=1,
                                                      value=modules.config.default_overwrite_switch,
