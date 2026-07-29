@@ -1543,16 +1543,25 @@ with shared.gradio_root:
                 # Direct private_logger to write images and log.html exclusively to comp_folder
                 modules.config.path_outputs = comp_folder
 
+                currentTask = ctrls_args[0]
                 for idx, m_name in enumerate(model_list):
+                    if currentTask.last_stop == 'stop':
+                        print("[Model Comparison] Sequence stopped by user.")
+                        break
+
                     print(f"[Model Comparison] ({idx+1}/{len(model_list)}) Testing model: {m_name}")
 
                     task_args = list(task_args_template)
                     task_args[12] = m_name # Set base_model_name
 
-                    task = worker.AsyncTask(args=task_args)
+                    currentTask.__init__(args=task_args)
 
-                    for progress_html, progress_window, progress_gallery, gallery_items in generate_clicked(task):
+                    for progress_html, progress_window, progress_gallery, gallery_items in generate_clicked(currentTask):
                         yield progress_html, progress_window, progress_gallery, gallery_items
+                    
+                    if currentTask.last_stop == 'stop':
+                        print("[Model Comparison] Sequence stopped by user.")
+                        break
             finally:
                 modules.config.path_outputs = old_path_outputs
 
