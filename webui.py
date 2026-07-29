@@ -181,7 +181,7 @@ with shared.gradio_root:
     # ── Top bar: title + dark mode toggle ─────────────────────────────────────
     with gr.Row(elem_id='top_bar_row'):
         gr.HTML(
-            f'<div style="display:flex;align-items:center;gap:12px;padding:6px 0;">'
+            f'<div style="display:flex;align-items:center;gap:12px;padding:6px 0;margin-left:44px;">'
             f'<span style="font-size:1.4em;font-weight:700;letter-spacing:.5px;">'
             f'🎨 Fooocus-inswapper</span></div>'
         )
@@ -192,14 +192,16 @@ with shared.gradio_root:
         dark_mode_btn.click(
             fn=None,
             _js="""() => {
-                const root = document.getElementById('root') ||
-                             document.querySelector('.gradio-container') ||
-                             document.body;
-                root.classList.toggle('dark-mode');
+                const html = document.documentElement;
+                const body = document.body;
+                const isDark = html.classList.toggle('dark-mode');
+                body.classList.toggle('dark-mode', isDark);
+                const root = document.getElementById('root') || document.querySelector('.gradio-container');
+                if (root) root.classList.toggle('dark-mode', isDark);
                 const btn = document.getElementById('dark_mode_btn');
                 if (btn) {
                     const b = btn.querySelector('button') || btn;
-                    b.textContent = root.classList.contains('dark-mode') ? '☀️' : '🌙';
+                    b.textContent = isDark ? '☀️' : '🌙';
                 }
             }""",
         )

@@ -416,3 +416,93 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
 #inpaint_brush_color input[type=color]{
   background: none;
 }
+
+/* ── Floating Night Mode Button (Top-Left Corner, Gray Accent) ────────────── */
+#dark_mode_btn {
+    position: fixed !important;
+    top: 12px !important;
+    left: 12px !important;
+    z-index: 999999 !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    border-radius: 50% !important;
+    background-color: #4b5563 !important;
+    color: #ffffff !important;
+    border: 1px solid #6b7280 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    font-size: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+#dark_mode_btn:hover {
+    background-color: #6b7280 !important;
+    border-color: #9ca3af !important;
+    transform: scale(1.08) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+#dark_mode_btn button {
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    cursor: pointer !important;
+}
+
+/* ── Whole-Screen Dark Grayscale Theme ────────────────────────────────────── */
+html.dark-mode,
+body.dark-mode,
+.dark-mode {
+    filter: grayscale(100%) !important;
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .gradio-container,
+.dark-mode .gradio-container * {
+    color-scheme: dark !important;
+}
+
+html.dark-mode body,
+html.dark-mode .gradio-container,
+html.dark-mode div,
+html.dark-mode fieldset,
+html.dark-mode label,
+html.dark-mode span,
+html.dark-mode [class*='block'],
+html.dark-mode [class*='panel'],
+html.dark-mode [class*='tab'],
+html.dark-mode [class*='accordion'] {
+    background-color: #1a1a1a !important;
+    color: #d1d5db !important;
+    border-color: #374151 !important;
+}
+
+html.dark-mode input,
+html.dark-mode textarea,
+html.dark-mode select,
+html.dark-mode #positive_prompt,
+html.dark-mode #negative_prompt {
+    background-color: #262626 !important;
+    color: #f3f4f6 !important;
+    border: 1px solid #4b5563 !important;
+}
+
+/* Ensure floating button remains gray accent */
+html.dark-mode #dark_mode_btn {
+    background-color: #4b5563 !important;
+    border-color: #6b7280 !important;
+}
