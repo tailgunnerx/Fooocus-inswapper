@@ -121,14 +121,41 @@ if exist "inswapper\CodeFormer\CodeFormer\facelib" (
 echo.
 echo [Step 6] Downloading inswapper_128.onnx model...
 if not exist "inswapper\checkpoints" mkdir "inswapper\checkpoints"
-if not exist "inswapper\checkpoints\inswapper_128.onnx" (
-    powershell -NoProfile -Command ^
-        "Invoke-WebRequest -Uri 'https://github.com/facefusion/facefusion-assets/releases/download/models/inswapper_128.onnx' -OutFile '.\inswapper\checkpoints\inswapper_128.onnx'"
+
+set "NEED_INSWAPPER=1"
+if exist "inswapper\checkpoints\inswapper_128.onnx" (
+    for %%F in ("inswapper\checkpoints\inswapper_128.onnx") do (
+        if %%~zF GEQ 10485760 (
+            set "NEED_INSWAPPER=0"
+            echo [Info] inswapper_128.onnx already exists and valid, skipping.
+        )
+    )
+)
+
+if "!NEED_INSWAPPER!"=="1" (
+    echo Downloading inswapper_128.onnx from primary mirror...
+    where curl >nul 2>&1
+    if not errorlevel 1 (
+        curl.exe -L -o "inswapper\checkpoints\inswapper_128.onnx" "https://huggingface.co/ezioruan/inswapper_128.onnx/resolve/main/inswapper_128.onnx"
+    ) else (
+        powershell -NoProfile -Command ^
+            "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('https://huggingface.co/ezioruan/inswapper_128.onnx/resolve/main/inswapper_128.onnx', '.\inswapper\checkpoints\inswapper_128.onnx')"
+    )
+    
+    :: Verify size > 10MB
+    for %%F in ("inswapper\checkpoints\inswapper_128.onnx") do (
+        if %%~zF LSS 10485760 (
+            echo [Info] Primary mirror failed or incomplete. Trying fallback mirror...
+            del /f /q "inswapper\checkpoints\inswapper_128.onnx" >nul 2>&1
+            curl.exe -L -o "inswapper\checkpoints\inswapper_128.onnx" "https://huggingface.co/deepinsight/inswapper/resolve/main/inswapper_128.onnx"
+        )
+    )
+
     if not exist "inswapper\checkpoints\inswapper_128.onnx" (
         echo [WARNING] inswapper_128.onnx download failed. You may need to download it manually.
+    ) else (
+        echo [Info] inswapper_128.onnx download complete.
     )
-) else (
-    echo [Info] inswapper_128.onnx already exists, skipping.
 )
 
 :: ---------------------------------------------------------------
@@ -140,12 +167,19 @@ if not exist "InstantID\models\antelopev2" mkdir "InstantID\models\antelopev2"
 
 :: Check if models already extracted
 if not exist "InstantID\models\antelopev2\1k3d68.onnx" (
-    powershell -NoProfile -Command ^
-        "Invoke-WebRequest -Uri 'https://keeper.mpdl.mpg.de/f/2d58b7fed5a74cb5be83/?dl=1' -OutFile '.\InstantID\models\antelopev2.zip' -TimeoutSec 120"
+    echo Downloading antelopev2.zip...
+    where curl >nul 2>&1
+    if not errorlevel 1 (
+        curl.exe -L -o "InstantID\models\antelopev2.zip" "https://keeper.mpdl.mpg.de/f/2d58b7fed5a74cb5be83/?dl=1"
+    ) else (
+        powershell -NoProfile -Command ^
+            "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://keeper.mpdl.mpg.de/f/2d58b7fed5a74cb5be83/?dl=1' -OutFile '.\InstantID\models\antelopev2.zip' -TimeoutSec 120"
+    )
     if exist "InstantID\models\antelopev2.zip" (
         powershell -NoProfile -Command ^
             "Expand-Archive -Path '.\InstantID\models\antelopev2.zip' -DestinationPath '.\InstantID\models\antelopev2' -Force"
         del /f /q "InstantID\models\antelopev2.zip"
+        echo [Info] antelopev2 models extracted successfully.
     ) else (
         echo [WARNING] antelopev2.zip download failed. InstantID face analysis may not work.
         echo           You can manually place the models in InstantID\models\antelopev2\

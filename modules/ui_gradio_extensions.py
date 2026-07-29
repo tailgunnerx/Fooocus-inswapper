@@ -58,7 +58,21 @@ def reload_javascript():
     css = css_html()
 
     def template_response(*args, **kwargs):
-        res = GradioTemplateResponseOriginal(*args, **kwargs)
+        try:
+            res = GradioTemplateResponseOriginal(*args, **kwargs)
+        except TypeError as e:
+            # Handle Starlette >= 0.28 parameter signature: TemplateResponse(request, name, context)
+            if len(args) >= 2 and isinstance(args[0], str) and isinstance(args[1], dict):
+                name = args[0]
+                context = args[1]
+                req = context.get('request', None)
+                if req is not None:
+                    res = GradioTemplateResponseOriginal(request=req, name=name, context=context)
+                else:
+                    raise e
+            else:
+                raise e
+
         res.body = res.body.replace(b'</head>', f'{js}</head>'.encode("utf8"))
         res.body = res.body.replace(b'</body>', f'{css}</body>'.encode("utf8"))
         res.init_headers()

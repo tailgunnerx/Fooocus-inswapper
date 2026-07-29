@@ -74,11 +74,11 @@ progress::after {
     text-align: right;
     width: 215px;
 }
-div:has(> #positive_prompt) {
+div:has(> #positive_prompt), div:has(> #negative_prompt) {
     border: none;
 }
 
-#positive_prompt {
+#positive_prompt, #negative_prompt {
     padding: 1px;
     background: var(--background-fill-primary);
 }

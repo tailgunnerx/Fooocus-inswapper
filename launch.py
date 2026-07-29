@@ -4,6 +4,17 @@ import sys
 
 print('[System ARGV] ' + str(sys.argv))
 
+try:
+    import gradio
+except ImportError:
+    print("\n" + "=" * 60)
+    print("[ERROR] 'gradio' module not found!")
+    print("        You are running Python directly instead of using the virtual environment.")
+    print("        Please run 'configure.bat' first to install dependencies,")
+    print("        then launch the application using 'run.bat' instead of 'py launch.py'.")
+    print("=" * 60 + "\n")
+    sys.exit(1)
+
 root = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(root)
 os.chdir(root)
