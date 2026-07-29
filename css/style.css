@@ -536,23 +536,54 @@ html.dark-mode .media-wrapper {
     border-color: #27272a !important;
 }
 
-/* Grayscale Generate button & primary action buttons in dark mode */
+/* Keep image previews, gallery images, thumbnails, and canvas elements in full color */
+html.dark-mode img,
+html.dark-mode canvas,
+html.dark-mode .gallery img,
+html.dark-mode .gallery-item img,
+html.dark-mode .main_view img,
+html.dark-mode .image_gallery img,
+html.dark-mode #final_gallery img,
+html.dark-mode [elem_id="final_gallery"] img,
+html.dark-mode .preview img,
+html.dark-mode .thumbnail-item img {
+    filter: none !important;
+}
+
+/* Generate, Stop, Skip & Action Buttons in Dark Mode */
 html.dark-mode #generate_button,
+html.dark-mode #stop_button,
+html.dark-mode #skip_button,
+html.dark-mode #reset_button,
 html.dark-mode .type_row,
+html.dark-mode .type_row_half,
 html.dark-mode button.primary,
 html.dark-mode button[variant='primary'] {
-    background-color: #3f3f46 !important;
-    color: #f4f4f5 !important;
-    border: 1px solid #52525b !important;
-    filter: grayscale(100%) !important;
+    background-color: #374151 !important;
+    color: #f3f4f6 !important;
+    border: 1px solid #4b5563 !important;
     box-shadow: none !important;
     text-shadow: none !important;
 }
 
+html.dark-mode #generate_button button,
+html.dark-mode #stop_button button,
+html.dark-mode #skip_button button,
+html.dark-mode #reset_button button,
+html.dark-mode .type_row button,
+html.dark-mode .type_row_half button {
+    background: transparent !important;
+    color: #f3f4f6 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
 html.dark-mode #generate_button:hover,
+html.dark-mode #stop_button:hover,
+html.dark-mode #skip_button:hover,
 html.dark-mode .type_row:hover,
-html.dark-mode button.primary:hover {
-    background-color: #52525b !important;
+html.dark-mode .type_row_half:hover {
+    background-color: #4b5563 !important;
     color: #ffffff !important;
 }
 
