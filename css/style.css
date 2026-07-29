@@ -463,13 +463,24 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
 
 /* ── Whole-Screen Dark Theme (Grayscale Slate Palette, Identical Layout) ────── */
 html.dark-mode,
-body.dark-mode {
+html.dark-mode body,
+body.dark-mode,
+html.dark-mode #root,
+html.dark-mode .gradio-container,
+html.dark-mode .contain,
+html.dark-mode .main,
+html.dark-mode [class*='gradio'] {
+    --bg-color: #1a1d24 !important;
+    --background-fill-primary: #1a1d24 !important;
+    --background-fill-secondary: #222630 !important;
+    --body-background-fill: #1a1d24 !important;
+    --body-text-color: #e0e6ed !important;
+    --block-background-fill: #222630 !important;
+    --block-border-color: #333846 !important;
+    --border-color-primary: #333846 !important;
+    --color-accent-soft: #2c313e !important;
     background-color: #1a1d24 !important;
-    color: #e0e6ed !important;
-}
-
-html.dark-mode .gradio-container {
-    background-color: #1a1d24 !important;
+    background: #1a1d24 !important;
     color: #e0e6ed !important;
     color-scheme: dark !important;
 }
