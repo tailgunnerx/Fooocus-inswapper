@@ -499,6 +499,12 @@ html.dark-mode [class*='gradio'] {
     --block-border-color: #333846 !important;
     --border-color-primary: #333846 !important;
     --color-accent-soft: #2c313e !important;
+    --button-primary-background-fill: #374151 !important;
+    --button-primary-text-color: #f3f4f6 !important;
+    --button-primary-background-fill-hover: #4b5563 !important;
+    --button-primary-text-color-hover: #ffffff !important;
+    --button-secondary-background-fill: #2c313e !important;
+    --button-secondary-text-color: #e5e7eb !important;
     background-color: #1a1d24 !important;
     background: #1a1d24 !important;
     color: #e0e6ed !important;
@@ -583,39 +589,51 @@ html.dark-mode video {
 }
 
 /* Generate, Stop, Skip & Action Buttons in Dark Mode */
+html.dark-mode button.primary,
+html.dark-mode button.lg,
 html.dark-mode #generate_button,
 html.dark-mode #generate_button *,
 html.dark-mode #generate_button button,
 html.dark-mode #stop_button,
 html.dark-mode #stop_button *,
+html.dark-mode #stop_button button,
 html.dark-mode #skip_button,
 html.dark-mode #skip_button *,
+html.dark-mode #skip_button button,
 html.dark-mode #reset_button,
 html.dark-mode #reset_button *,
 html.dark-mode .type_row,
 html.dark-mode .type_row *,
+html.dark-mode .type_row button,
 html.dark-mode .type_row_half,
 html.dark-mode .type_row_half *,
-html.dark-mode button.primary,
+html.dark-mode .type_row_half button,
 html.dark-mode button[variant='primary'] {
     background-color: #374151 !important;
+    background: #374151 !important;
     color: #f3f4f6 !important;
-    border-color: #4b5563 !important;
+    border: 1px solid #4b5563 !important;
     box-shadow: none !important;
     text-shadow: none !important;
+    font-weight: 700 !important;
 }
 
+html.dark-mode button.primary:hover,
 html.dark-mode #generate_button:hover,
 html.dark-mode #generate_button:hover *,
+html.dark-mode #generate_button:hover button,
 html.dark-mode #stop_button:hover,
 html.dark-mode #stop_button:hover *,
+html.dark-mode #stop_button:hover button,
 html.dark-mode #skip_button:hover,
 html.dark-mode #skip_button:hover *,
+html.dark-mode #skip_button:hover button,
 html.dark-mode .type_row:hover,
 html.dark-mode .type_row:hover *,
 html.dark-mode .type_row_half:hover,
 html.dark-mode .type_row_half:hover * {
     background-color: #4b5563 !important;
+    background: #4b5563 !important;
     color: #ffffff !important;
 }
 
