@@ -461,27 +461,27 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
     cursor: pointer !important;
 }
 
-/* ── Whole-Screen Pitch-Black Dark Theme (No Pulsing/Flickering) ───────────── */
-html.dark-mode {
-    background-color: #000000 !important;
-    color: #e0e0e0 !important;
-}
-
-html.dark-mode body,
-html.dark-mode #root,
-html.dark-mode .gradio-container,
+/* ── Whole-Screen Dark Theme (Grayscale Slate Palette, Identical Layout) ────── */
+html.dark-mode,
 body.dark-mode {
-    background-color: #000000 !important;
-    color: #e0e0e0 !important;
+    background-color: #1a1d24 !important;
+    color: #e0e6ed !important;
 }
 
-/* Outer perimeter and component borders */
+html.dark-mode .gradio-container {
+    background-color: #1a1d24 !important;
+    color: #e0e6ed !important;
+    color-scheme: dark !important;
+}
+
+/* Dark mode border accents */
 html.dark-mode *,
 html.dark-mode *:before,
 html.dark-mode *:after {
-    border-color: #27272a !important;
+    border-color: #333846 !important;
 }
 
+/* Grayscale dark panels, tabs, blocks, and accordions */
 html.dark-mode div,
 html.dark-mode section,
 html.dark-mode main,
@@ -491,11 +491,11 @@ html.dark-mode [class*='block'],
 html.dark-mode [class*='panel'],
 html.dark-mode [class*='tab'],
 html.dark-mode [class*='accordion'] {
-    background-color: #121212 !important;
-    color: #d4d4d8 !important;
+    background-color: #222630 !important;
+    color: #d1d5db !important;
 }
 
-/* Transparent backgrounds for labels so text isn't highlighted in gray boxes */
+/* Transparent label text backgrounds (no gray highlight blocks behind labels) */
 html.dark-mode label,
 html.dark-mode label span,
 html.dark-mode span,
@@ -504,10 +504,10 @@ html.dark-mode .label-wrap,
 html.dark-mode [data-testid*='block-label'] {
     background: transparent !important;
     background-color: transparent !important;
-    color: #e4e4e7 !important;
+    color: #e5e7eb !important;
 }
 
-/* Clean dark textareas & inputs */
+/* Dark input fields and textareas */
 html.dark-mode input,
 html.dark-mode textarea,
 html.dark-mode select,
@@ -515,13 +515,13 @@ html.dark-mode #positive_prompt,
 html.dark-mode #negative_prompt,
 html.dark-mode #positive_prompt textarea,
 html.dark-mode #negative_prompt textarea {
-    background-color: #000000 !important;
-    color: #f4f4f5 !important;
-    border: 1px solid #3f3f46 !important;
+    background-color: #16181f !important;
+    color: #f3f4f6 !important;
+    border: 1px solid #374151 !important;
     box-shadow: none !important;
 }
 
-/* Image Preview & Gallery Containers Pure Black Background */
+/* Dark image preview & gallery container background */
 html.dark-mode .main_view,
 html.dark-mode #final_gallery,
 html.dark-mode .image_gallery,
@@ -532,9 +532,9 @@ html.dark-mode .gallery-item,
 html.dark-mode [elem_id="final_gallery"],
 html.dark-mode .preview,
 html.dark-mode .media-wrapper {
-    background-color: #000000 !important;
-    background: #000000 !important;
-    border-color: #27272a !important;
+    background-color: #16181f !important;
+    background: #16181f !important;
+    border-color: #333846 !important;
 }
 
 /* Keep images, canvas, and video in original color without filter artifacts */
@@ -544,7 +544,7 @@ html.dark-mode video {
     filter: none !important;
 }
 
-/* Generate, Stop, Skip & Action Buttons in Dark Mode */
+/* Action buttons in Dark Mode */
 html.dark-mode #generate_button,
 html.dark-mode #stop_button,
 html.dark-mode #skip_button,
@@ -570,6 +570,34 @@ html.dark-mode .type_row_half button {
     color: #f3f4f6 !important;
     border: none !important;
     box-shadow: none !important;
+}
+
+html.dark-mode #generate_button:hover,
+html.dark-mode #stop_button:hover,
+html.dark-mode #skip_button:hover,
+html.dark-mode .type_row:hover,
+html.dark-mode .type_row_half:hover {
+    background-color: #4b5563 !important;
+    color: #ffffff !important;
+}
+
+html.dark-mode button,
+html.dark-mode .gr-button {
+    background-color: #2c313e !important;
+    color: #e5e7eb !important;
+    border: 1px solid #374151 !important;
+}
+
+html.dark-mode #dark_mode_btn,
+html.dark-mode #dark_mode_btn button {
+    background-color: #374151 !important;
+    color: #f3f4f6 !important;
+    border-color: #4b5563 !important;
+}
+
+html.dark-mode ::selection {
+    background: #374151 !important;
+    color: #ffffff !important;
 }
 
 html.dark-mode #generate_button:hover,
