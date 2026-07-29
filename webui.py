@@ -4,6 +4,8 @@ import os
 import sys
 import json
 import time
+import datetime
+import shutil
 import shared
 import modules.config
 import fooocus_version
@@ -1050,6 +1052,37 @@ with shared.gradio_root:
                     refiner_model.change(lambda x: gr.update(visible=x != 'None'),
                                          inputs=refiner_model, outputs=refiner_switch, show_progress=False, queue=False)
 
+                with gr.Accordion("🧪 Multi-Model Checkpoint Comparison (Batch Test Models)", open=False):
+                    gr.HTML('<div style="font-size:0.85em;color:#aaa;margin-bottom:8px;">'
+                            'Select model checkpoints below to generate images across all selected models using your current prompt and settings.<br/>'
+                            'Outputs are saved into a dedicated comparison folder for today with <code>positive_prompt.txt</code>, '
+                            '<code>negative_prompt.txt</code>, and images named by model.</div>')
+                    
+                    model_comparison_checkboxes = gr.CheckboxGroup(
+                        label='Select Models to Compare',
+                        choices=copy.deepcopy(modules.config.model_filenames),
+                        value=[]
+                    )
+                    with gr.Row():
+                        model_comp_select_all = gr.Button(value='Select All', size='sm', variant='secondary')
+                        model_comp_deselect_all = gr.Button(value='Deselect All', size='sm', variant='secondary')
+
+                    model_comp_select_all.click(
+                        lambda: gr.update(value=copy.deepcopy(modules.config.model_filenames)),
+                        outputs=model_comparison_checkboxes,
+                        queue=False, show_progress=False
+                    )
+                    model_comp_deselect_all.click(
+                        lambda: gr.update(value=[]),
+                        outputs=model_comparison_checkboxes,
+                        queue=False, show_progress=False
+                    )
+
+                    model_comparison_btn = gr.Button(
+                        value='🧪 Generate Across Selected Models',
+                        variant='primary'
+                    )
+
                 with gr.Group():
                     lora_ctrls = []
 
@@ -1271,6 +1304,7 @@ with shared.gradio_root:
                     results += [gr.update(visible=len(modules.config.model_filenames) == 0)]
                     results += [gr.update(choices=['None'] + modules.config.model_filenames)]
                     results += [gr.update(choices=[flags.default_vae] + modules.config.vae_filenames)]
+                    results += [gr.update(choices=copy.deepcopy(modules.config.model_filenames))]
                     if not args_manager.args.disable_preset_selection:
                         results += [gr.update(choices=modules.config.available_presets)]
                     for i in range(modules.config.default_max_lora_number):
@@ -1278,7 +1312,7 @@ with shared.gradio_root:
                                     gr.update(choices=['None'] + modules.config.lora_filenames), gr.update()]
                     return results
 
-                refresh_files_output = [base_model, no_model_warning_row, refiner_model, vae_name]
+                refresh_files_output = [base_model, no_model_warning_row, refiner_model, vae_name, model_comparison_checkboxes]
                 if not args_manager.args.disable_preset_selection:
                     refresh_files_output += [preset_selection]
                 refresh_files.click(refresh_files_clicked, [], refresh_files_output + lora_ctrls,
@@ -1446,6 +1480,84 @@ with shared.gradio_root:
             .then(lambda: (gr.update(visible=True, interactive=True), gr.update(visible=False, interactive=False), gr.update(visible=False, interactive=False), False),
                   outputs=[generate_button, stop_button, skip_button, state_is_generating]).then(fn=lambda: None, _js='playNotification').then(fn=lambda: None, _js='refresh_grid_delayed') \
             .then(fn=update_history_link, outputs=history_link)
+
+        def generate_model_comparison_clicked(model_list, *ctrls_args):
+            if not model_list or len(model_list) == 0:
+                print('[Model Comparison] No models selected!')
+                yield gr.update(visible=True, value=modules.html.make_progress_html(0, '⚠️ Please select at least one model checkpoint to compare in the Models tab.')), \
+                      gr.update(), gr.update(), gr.update()
+                return
+
+            task_args_template = list(ctrls_args)[1:] # Strip currentTask (index 0)
+
+            # Extract prompt info for logging
+            prompt_val = task_args_template[1] if len(task_args_template) > 1 else ''
+            neg_prompt_val = task_args_template[2] if len(task_args_template) > 2 else ''
+            output_format_val = task_args_template[6] if len(task_args_template) > 6 else modules.config.default_output_format
+            seed_val = task_args_template[7] if len(task_args_template) > 7 else 0
+
+            now = datetime.datetime.now()
+            today_str = now.strftime('%Y-%m-%d')
+            time_str = now.strftime('%H%M%S')
+
+            comp_folder = os.path.join(modules.config.path_outputs, today_str, f'model_comparison_{time_str}')
+            os.makedirs(comp_folder, exist_ok=True)
+
+            try:
+                with open(os.path.join(comp_folder, 'positive_prompt.txt'), 'w', encoding='utf-8') as f:
+                    f.write(str(prompt_val))
+                with open(os.path.join(comp_folder, 'negative_prompt.txt'), 'w', encoding='utf-8') as f:
+                    f.write(str(neg_prompt_val))
+            except Exception as e:
+                print(f"[Model Comparison] Error writing prompt files: {e}")
+
+            print(f"[Model Comparison] Output folder created: {comp_folder}")
+            print(f"[Model Comparison] Running comparison for {len(model_list)} models...")
+
+            for idx, m_name in enumerate(model_list):
+                print(f"[Model Comparison] ({idx+1}/{len(model_list)}) Testing model: {m_name}")
+
+                task_args = list(task_args_template)
+                task_args[12] = m_name # Set base_model_name
+
+                task = worker.AsyncTask(args=task_args)
+
+                for progress_html, progress_window, progress_gallery, gallery_items in generate_clicked(task):
+                    yield progress_html, progress_window, progress_gallery, gallery_items
+
+                # Copy outputs to comp_folder named after model
+                if hasattr(task, 'results') and task.results:
+                    clean_model_name = os.path.splitext(os.path.basename(m_name))[0]
+                    clean_model_name = "".join([c for c in clean_model_name if c.isalnum() or c in ('-', '_', '.')]).rstrip()
+
+                    for res_idx, res_item in enumerate(task.results):
+                        try:
+                            img_filename = f"{clean_model_name}_seed{seed_val}_{res_idx+1}.{output_format_val}"
+                            dest_path = os.path.join(comp_folder, img_filename)
+
+                            if isinstance(res_item, str) and os.path.exists(res_item):
+                                shutil.copy2(res_item, dest_path)
+                                print(f"[Model Comparison] Saved image to: {dest_path}")
+                            elif isinstance(res_item, Image.Image):
+                                res_item.save(dest_path)
+                                print(f"[Model Comparison] Saved image to: {dest_path}")
+                        except Exception as ex:
+                            print(f"[Model Comparison] Error saving image: {ex}")
+
+        model_comparison_btn.click(
+            lambda: (gr.update(visible=True, interactive=True), gr.update(visible=True, interactive=True), gr.update(visible=False, interactive=False), [], True),
+            outputs=[stop_button, skip_button, generate_button, gallery, state_is_generating]
+        ).then(
+            fn=refresh_seed, inputs=[seed_random, image_seed], outputs=image_seed
+        ).then(
+            fn=generate_model_comparison_clicked,
+            inputs=[model_comparison_checkboxes] + ctrls,
+            outputs=[progress_html, progress_window, progress_gallery, gallery]
+        ).then(
+            lambda: (gr.update(visible=True, interactive=True), gr.update(visible=False, interactive=False), gr.update(visible=False, interactive=False), False),
+            outputs=[generate_button, stop_button, skip_button, state_is_generating]
+        ).then(fn=lambda: None, _js='playNotification').then(fn=lambda: None, _js='refresh_grid_delayed') \
+         .then(fn=update_history_link, outputs=history_link)
 
         reset_button.click(lambda: [worker.AsyncTask(args=[]), False, gr.update(visible=True, interactive=True)] +
                                    [gr.update(visible=False)] * 6 +
