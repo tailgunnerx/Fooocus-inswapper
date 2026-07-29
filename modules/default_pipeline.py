@@ -48,6 +48,10 @@ def refresh_controlnets(model_paths):
 def assert_model_integrity():
     error_message = None
 
+    if model_base.unet_with_lora is None or model_base.unet_with_lora.model is None:
+        print('[Warning] No base model currently loaded.')
+        return True
+
     if not isinstance(model_base.unet_with_lora.model, SDXL):
         error_message = 'You have selected base model other than SDXL. This is not supported yet.'
 
@@ -63,7 +67,9 @@ def refresh_base_model(name, vae_name=None):
     global model_base
 
     if not name or name == 'None' or name == '':
-        raise ValueError("No base model selected or found! Please place your SDXL model files (e.g. .safetensors) into the 'models/checkpoints' directory and select one in the Models tab.")
+        print("[Warning] No base model selected or found! Please place your SDXL model files into the 'models/checkpoints' directory.")
+        model_base = core.StableDiffusionModel()
+        return
 
     filename = get_file_from_folder_list(name, modules.config.paths_checkpoints)
 
@@ -230,7 +236,8 @@ def prepare_text_encoder(async_call=True):
         # TODO: make sure that this is always called in an async way so that users cannot feel it.
         pass
     assert_model_integrity()
-    ldm_patched.modules.model_management.load_models_gpu([final_clip.patcher, final_expansion.patcher])
+    if final_clip is not None and getattr(final_clip, 'patcher', None) is not None and final_expansion is not None and getattr(final_expansion, 'patcher', None) is not None:
+        ldm_patched.modules.model_management.load_models_gpu([final_clip.patcher, final_expansion.patcher])
     return
 
 

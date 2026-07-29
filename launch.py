@@ -131,9 +131,10 @@ def download_models(default_model, previous_default_models, checkpoint_downloads
         if model_exists:
             continue
 
-        # Check for alternative model among previous defaults to avoid downloading
+        # Check if an alternative model exists (either from previous_default_models or any model in checkpoints)
         alternative_found = False
         if not args.always_download_new_model:
+            # First check previous_default_models list
             for alternative_model_name in previous_default_models:
                 if alternative_model_name == model_name:
                     continue  # skip self
@@ -149,8 +150,20 @@ def download_models(default_model, previous_default_models, checkpoint_downloads
                 if alternative_found:
                     break
 
+            # If no previous default model match, check if ANY model exists in checkpoints folder
+            if not alternative_found:
+                available_models = config.get_model_filenames(config.paths_checkpoints)
+                if available_models:
+                    alt_model = available_models[0]
+                    print(f'Default model [{model_name}] not found, but found [{alt_model}] in checkpoints folder.')
+                    print(f'Fooocus will use [{alt_model}] to avoid downloading new models.')
+                    models_to_skip.append(model_name)
+                    if default_model == model_name:
+                        default_model = alt_model
+                    alternative_found = True
+
         if not alternative_found:
-            # Ask user if they want to download this model
+            # No models found at all in checkpoints folder — ask user if they want to download
             if is_startup:
                 try:
                     user_input = input(f"Model [{model_name}] not found. Do you want to download it? [y/N]: ").strip().lower()
@@ -164,15 +177,9 @@ def download_models(default_model, previous_default_models, checkpoint_downloads
             else:
                 print(f"Skipping download of [{model_name}].")
                 models_to_skip.append(model_name)
-
                 if default_model == model_name:
-                    available_models = config.get_model_filenames(config.paths_checkpoints)
-                    if available_models:
-                        default_model = available_models[0]
-                        print(f"Using model found in checkpoints folder: {default_model}")
-                    else:
-                        print("WARNING: No models found in the checkpoints folder!")
-                        default_model = ""
+                    default_model = ""
+                print("WARNING: No models found in the checkpoints folder! The app will start up, but you must place a model in models/checkpoints.")
 
     # Remove skipped models from download queue
     checkpoint_downloads = {k: v for k, v in checkpoint_downloads.items() if k not in models_to_skip}
