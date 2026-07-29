@@ -461,7 +461,7 @@ div:has(> #positive_prompt), div:has(> #negative_prompt) {
     cursor: pointer !important;
 }
 
-/* ── Whole-Screen Dark Grayscale Theme ────────────────────────────────────── */
+/* ── Whole-Screen Dark Grayscale Theme (No Layout Shift) ──────────────────── */
 html.dark-mode {
     filter: grayscale(100%) !important;
     background-color: #121212 !important;
@@ -469,21 +469,16 @@ html.dark-mode {
 }
 
 html.dark-mode body,
-html.dark-mode #root,
-html.dark-mode .gradio-container,
 body.dark-mode {
     background-color: #121212 !important;
     color: #e0e0e0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    min-height: 100vh !important;
 }
 
+/* Fix outer perimeter and component backgrounds without shifting layout */
 html.dark-mode *,
 html.dark-mode *:before,
 html.dark-mode *:after {
-    border-color: #374151 !important;
+    border-color: #27272a !important;
 }
 
 html.dark-mode div,
@@ -495,18 +490,50 @@ html.dark-mode [class*='block'],
 html.dark-mode [class*='panel'],
 html.dark-mode [class*='tab'],
 html.dark-mode [class*='accordion'] {
-    background-color: #1a1a1a !important;
-    color: #d1d5db !important;
+    background-color: #18181b !important;
+    color: #d4d4d8 !important;
 }
 
+/* Transparent backgrounds for labels so text isn't highlighted in gray boxes */
+html.dark-mode label,
+html.dark-mode label span,
+html.dark-mode span,
+html.dark-mode p,
+html.dark-mode .label-wrap,
+html.dark-mode [data-testid*='block-label'] {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #e4e4e7 !important;
+}
+
+/* Clean dark textareas & inputs */
 html.dark-mode input,
 html.dark-mode textarea,
 html.dark-mode select,
 html.dark-mode #positive_prompt,
-html.dark-mode #negative_prompt {
-    background-color: #262626 !important;
-    color: #f3f4f6 !important;
-    border: 1px solid #4b5563 !important;
+html.dark-mode #negative_prompt,
+html.dark-mode #positive_prompt textarea,
+html.dark-mode #negative_prompt textarea {
+    background-color: #121212 !important;
+    color: #f4f4f5 !important;
+    border: 1px solid #3f3f46 !important;
+    box-shadow: none !important;
+}
+
+/* Image Preview & Gallery Containers Dark Background */
+html.dark-mode .main_view,
+html.dark-mode #final_gallery,
+html.dark-mode .image_gallery,
+html.dark-mode .resizable_area,
+html.dark-mode div:has(> #final_gallery),
+html.dark-mode .gallery,
+html.dark-mode .gallery-item,
+html.dark-mode [elem_id="final_gallery"],
+html.dark-mode .preview,
+html.dark-mode .media-wrapper {
+    background-color: #121212 !important;
+    background: #121212 !important;
+    border-color: #27272a !important;
 }
 
 /* Grayscale Generate button & primary action buttons in dark mode */
@@ -514,9 +541,9 @@ html.dark-mode #generate_button,
 html.dark-mode .type_row,
 html.dark-mode button.primary,
 html.dark-mode button[variant='primary'] {
-    background-color: #4b5563 !important;
-    color: #f3f4f6 !important;
-    border: 1px solid #6b7280 !important;
+    background-color: #3f3f46 !important;
+    color: #f4f4f5 !important;
+    border: 1px solid #52525b !important;
     filter: grayscale(100%) !important;
     box-shadow: none !important;
     text-shadow: none !important;
@@ -525,33 +552,33 @@ html.dark-mode button[variant='primary'] {
 html.dark-mode #generate_button:hover,
 html.dark-mode .type_row:hover,
 html.dark-mode button.primary:hover {
-    background-color: #6b7280 !important;
+    background-color: #52525b !important;
     color: #ffffff !important;
 }
 
 html.dark-mode button,
 html.dark-mode .gr-button {
-    background-color: #374151 !important;
-    color: #e5e7eb !important;
-    border: 1px solid #4b5563 !important;
+    background-color: #27272a !important;
+    color: #e4e4e7 !important;
+    border: 1px solid #3f3f46 !important;
 }
 
 html.dark-mode #dark_mode_btn,
 html.dark-mode #dark_mode_btn button {
-    background-color: #4b5563 !important;
-    color: #f3f4f6 !important;
-    border-color: #6b7280 !important;
+    background-color: #3f3f46 !important;
+    color: #f4f4f5 !important;
+    border-color: #52525b !important;
 }
 
 html.dark-mode ::selection {
-    background: #4b5563 !important;
+    background: #3f3f46 !important;
     color: #ffffff !important;
 }
 
-/* ── Wildcard Icon & Checklist (Left side of Pos Prompt) ──────────────────── */
+/* ── Wildcard Icon & Checklist (Wider readable popout list) ────────────────── */
 #wildcard_col {
     min-width: 48px !important;
-    max-width: 220px !important;
+    max-width: 320px !important;
     align-self: flex-start !important;
     margin-top: 26px !important;
 }
@@ -559,8 +586,14 @@ html.dark-mode ::selection {
 #wildcard_accordion {
     border: 1px solid var(--border-color-primary, #4b5563) !important;
     border-radius: 6px !important;
-    background: var(--background-fill-secondary, #374151) !important;
+    background: var(--background-fill-secondary, #27272a) !important;
     padding: 0 !important;
+    min-width: 48px !important;
+}
+
+#wildcard_accordion[open] {
+    min-width: 280px !important;
+    width: 280px !important;
 }
 
 #wildcard_accordion > .label-wrap {
@@ -572,13 +605,16 @@ html.dark-mode ::selection {
 }
 
 #wildcard_checkboxes {
-    max-height: 250px !important;
+    max-height: 280px !important;
     overflow-y: auto !important;
-    padding: 8px !important;
+    padding: 8px 12px !important;
+    min-width: 260px !important;
 }
 
-#wildcard_checkboxes label {
+#wildcard_checkboxes label,
+#wildcard_checkboxes span {
     font-size: 13px !important;
     padding: 3px 6px !important;
     cursor: pointer !important;
+    white-space: nowrap !important;
 }
