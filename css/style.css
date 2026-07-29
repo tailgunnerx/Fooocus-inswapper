@@ -651,12 +651,22 @@ html.dark-mode ::selection {
 
 /* ── Wildcard Icon & Checklist ────────────────────────────────────────────── */
 #wildcard_col {
-    min-width: 48px !important;
-    max-width: 60px !important;
     align-self: flex-start !important;
     margin-top: 26px !important;
     position: relative !important;
     z-index: 99999 !important;
+    /* collapse to icon when closed */
+    min-width: 52px !important;
+    max-width: 52px !important;
+    flex: 0 0 52px !important;
+    overflow: visible !important;
+}
+
+/* When accordion is open, let the column breathe but popout overlays via absolute */
+#wildcard_col:has(#wildcard_accordion[open]) {
+    min-width: 52px !important;
+    max-width: 52px !important;
+    flex: 0 0 52px !important;
 }
 
 /* Collapsed state — just the icon, light bg */
@@ -666,8 +676,10 @@ html.dark-mode ::selection {
     background: #f9fafb !important;
     padding: 0 !important;
     min-width: 48px !important;
+    width: 48px !important;
     position: relative !important;
     z-index: 99999 !important;
+    overflow: visible !important;
 }
 
 /* Open/expanded — absolute popout card, light mode */
@@ -675,8 +687,9 @@ html.dark-mode ::selection {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    min-width: 420px !important;
-    width: 420px !important;
+    min-width: 480px !important;
+    width: 480px !important;
+    max-width: 480px !important;
     z-index: 999999 !important;
     border: 2px solid #9ca3af !important;
     border-radius: 8px !important;

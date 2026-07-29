@@ -244,7 +244,7 @@ with shared.gradio_root:
                                  elem_classes=['resizable_area', 'main_view', 'final_gallery', 'image_gallery'],
                                  elem_id='final_gallery')
             with gr.Row():
-                with gr.Column(scale=1, min_width=50, elem_id='wildcard_col'):
+                with gr.Column(scale=1, min_width=480, elem_id='wildcard_col'):
                     def get_wildcard_tags():
                         try:
                             files = modules.config.get_files_from_folder(modules.config.path_wildcards, ['.txt'])
