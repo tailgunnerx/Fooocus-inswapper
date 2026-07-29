@@ -264,40 +264,6 @@ with shared.gradio_root:
                             elem_id="wildcard_checkboxes"
                         )
 
-                    # JS to reposition accordion popout as fixed overlay
-                    gr.HTML(value="""<script>
-(function() {
-    function setupWildcardPopout() {
-        var acc = document.getElementById('wildcard_accordion');
-        if (!acc) { setTimeout(setupWildcardPopout, 500); return; }
-        var observer = new MutationObserver(function() {
-            if (acc.hasAttribute('open') || acc.open) {
-                var col = document.getElementById('wildcard_col');
-                var rect = col ? col.getBoundingClientRect() : {top: 80, left: 10};
-                acc.style.position = 'fixed';
-                acc.style.top = rect.top + 'px';
-                acc.style.left = rect.left + 'px';
-                acc.style.width = '480px';
-                acc.style.minWidth = '480px';
-                acc.style.maxWidth = '480px';
-                acc.style.zIndex = '9999999';
-            } else {
-                acc.style.position = '';
-                acc.style.top = '';
-                acc.style.left = '';
-                acc.style.width = '';
-                acc.style.minWidth = '';
-                acc.style.maxWidth = '';
-                acc.style.zIndex = '';
-            }
-        });
-        observer.observe(acc, {attributes: true, attributeFilter: ['open']});
-    }
-    if (document.readyState === 'complete') setupWildcardPopout();
-    else window.addEventListener('load', setupWildcardPopout);
-})();
-</script>""", visible=False)
-
                 with gr.Column(scale=16):
                     prompt = gr.Textbox(label="+ Positive Prompt:", show_label=True, placeholder="Type prompt here or paste parameters.", elem_id='positive_prompt',
                                         autofocus=True, lines=3)
@@ -1658,4 +1624,37 @@ shared.gradio_root.launch(
     auth=check_auth if (args_manager.args.share or args_manager.args.listen) and auth_enabled else None,
     allowed_paths=[modules.config.path_outputs],
     blocked_paths=[constants.AUTH_FILENAME]
+)
+
+shared.gradio_root.load(
+    fn=None,
+    _js="""() => {
+        function setupWildcardPopout() {
+            var acc = document.getElementById('wildcard_accordion');
+            if (!acc) { setTimeout(setupWildcardPopout, 500); return; }
+            var observer = new MutationObserver(function() {
+                if (acc.hasAttribute('open') || acc.open) {
+                    var col = document.getElementById('wildcard_col');
+                    var rect = col ? col.getBoundingClientRect() : {top: 80, left: 10};
+                    acc.style.position = 'fixed';
+                    acc.style.top = rect.top + 'px';
+                    acc.style.left = rect.left + 'px';
+                    acc.style.width = '480px';
+                    acc.style.minWidth = '480px';
+                    acc.style.maxWidth = '480px';
+                    acc.style.zIndex = '9999999';
+                } else {
+                    acc.style.position = '';
+                    acc.style.top = '';
+                    acc.style.left = '';
+                    acc.style.width = '';
+                    acc.style.minWidth = '';
+                    acc.style.maxWidth = '';
+                    acc.style.zIndex = '';
+                }
+            });
+            observer.observe(acc, {attributes: true, attributeFilter: ['open']});
+        }
+        setupWildcardPopout();
+    }"""
 )
