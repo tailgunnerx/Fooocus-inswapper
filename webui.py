@@ -1625,36 +1625,3 @@ shared.gradio_root.launch(
     allowed_paths=[modules.config.path_outputs],
     blocked_paths=[constants.AUTH_FILENAME]
 )
-
-shared.gradio_root.load(
-    fn=None,
-    _js="""() => {
-        function setupWildcardPopout() {
-            var acc = document.getElementById('wildcard_accordion');
-            if (!acc) { setTimeout(setupWildcardPopout, 500); return; }
-            var observer = new MutationObserver(function() {
-                if (acc.hasAttribute('open') || acc.open) {
-                    var col = document.getElementById('wildcard_col');
-                    var rect = col ? col.getBoundingClientRect() : {top: 80, left: 10};
-                    acc.style.position = 'fixed';
-                    acc.style.top = rect.top + 'px';
-                    acc.style.left = rect.left + 'px';
-                    acc.style.width = '480px';
-                    acc.style.minWidth = '480px';
-                    acc.style.maxWidth = '480px';
-                    acc.style.zIndex = '9999999';
-                } else {
-                    acc.style.position = '';
-                    acc.style.top = '';
-                    acc.style.left = '';
-                    acc.style.width = '';
-                    acc.style.minWidth = '';
-                    acc.style.maxWidth = '';
-                    acc.style.zIndex = '';
-                }
-            });
-            observer.observe(acc, {attributes: true, attributeFilter: ['open']});
-        }
-        setupWildcardPopout();
-    }"""
-)

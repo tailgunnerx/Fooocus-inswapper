@@ -661,41 +661,34 @@ html.dark-mode ::selection {
     z-index: 99999 !important;
 }
 
-/* Collapsed state — just the icon */
+/* Accordion: absolute position escapes flex constraints. Width auto-expands via max-content */
 #wildcard_accordion {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
     border: 1px solid #d1d5db !important;
     border-radius: 8px !important;
-    background: #f9fafb !important;
+    background: #ffffff !important;
     padding: 0 !important;
     min-width: 48px !important;
-    width: 48px !important;
+    width: max-content !important; /* Shrinks to button when closed, expands to checkboxes when open */
+    max-width: 480px !important;
+    z-index: 999999 !important;
     overflow: visible !important;
-}
-
-/* Open/expanded — JS sets position:fixed, width:480px; CSS handles appearance */
-#wildcard_accordion[open] {
-    border: 2px solid #9ca3af !important;
-    border-radius: 8px !important;
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-    background: #ffffff !important;
 }
 
 /* Dark mode overrides for accordion */
 html.dark-mode #wildcard_accordion {
     background: #2d3342 !important;
     border-color: #4b5563 !important;
-}
-
-html.dark-mode #wildcard_accordion[open] {
-    background: #2d3342 !important;
-    background-color: #2d3342 !important;
-    border: 2px solid #64748b !important;
-    color: #f3f4f6 !important;
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.75), 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* Header row inside accordion — light mode */
 #wildcard_accordion > .label-wrap {
+    width: 100% !important; /* Stretch to fill container */
+    min-width: 48px !important;
     padding: 8px 12px !important;
     font-size: 18px !important;
     font-weight: bold !important;
@@ -716,6 +709,9 @@ html.dark-mode #wildcard_accordion > .label-wrap {
 
 /* Scrollable checkbox list — light mode */
 #wildcard_checkboxes {
+    width: 480px !important; /* Forces accordion to expand to 480px when visible */
+    min-width: 480px !important;
+    max-width: 480px !important;
     max-height: 300px !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
