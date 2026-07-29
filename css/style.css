@@ -639,25 +639,35 @@ html.dark-mode ::selection {
     color: #ffffff !important;
 }
 
-/* ── Wildcard Icon & Checklist (Wider readable popout list) ────────────────── */
+/* ── Wildcard Icon & Checklist (Floating Popover over Prompt Boxes) ───────── */
 #wildcard_col {
     min-width: 48px !important;
     max-width: 320px !important;
     align-self: flex-start !important;
     margin-top: 26px !important;
+    position: relative !important;
+    z-index: 99999 !important;
 }
 
 #wildcard_accordion {
     border: 1px solid var(--border-color-primary, #4b5563) !important;
     border-radius: 6px !important;
-    background: var(--background-fill-secondary, #27272a) !important;
+    background: var(--background-fill-secondary, #222630) !important;
     padding: 0 !important;
     min-width: 48px !important;
+    position: relative !important;
+    z-index: 99999 !important;
 }
 
 #wildcard_accordion[open] {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
     min-width: 280px !important;
     width: 280px !important;
+    z-index: 999999 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+    background: var(--background-fill-primary, #1e222b) !important;
 }
 
 #wildcard_accordion > .label-wrap {
