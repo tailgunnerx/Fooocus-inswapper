@@ -229,7 +229,24 @@ with shared.gradio_root:
                                  elem_classes=['resizable_area', 'main_view', 'final_gallery', 'image_gallery'],
                                  elem_id='final_gallery')
             with gr.Row():
-                with gr.Column(scale=17):
+                with gr.Column(scale=2, min_width=110, elem_id='wildcard_col'):
+                    def get_wildcard_choices():
+                        try:
+                            files = modules.config.get_files_from_folder(modules.config.path_wildcards, ['.txt'])
+                            names = sorted([os.path.splitext(os.path.basename(f))[0] for f in files if f.endswith('.txt')])
+                            return ['📋 Wildcards'] + [f'__{n}__' for n in names]
+                        except Exception:
+                            return ['📋 Wildcards']
+
+                    wildcard_dropdown = gr.Dropdown(
+                        choices=get_wildcard_choices(),
+                        value='📋 Wildcards',
+                        show_label=False,
+                        container=False,
+                        elem_id='wildcard_dropdown'
+                    )
+
+                with gr.Column(scale=15):
                     prompt = gr.Textbox(show_label=False, placeholder="Type prompt here or paste parameters.", elem_id='positive_prompt',
                                         autofocus=True, lines=3)
 
@@ -247,6 +264,33 @@ with shared.gradio_root:
                     load_parameter_button = gr.Button(label="Load Parameters", value="Load Parameters", elem_classes='type_row', elem_id='load_parameter_button', visible=False)
                     skip_button = gr.Button(label="Skip", value="Skip", elem_classes='type_row_half', elem_id='skip_button', visible=False)
                     stop_button = gr.Button(label="Stop", value="Stop", elem_classes='type_row_half', elem_id='stop_button', visible=False)
+
+                def add_wildcard_to_prompt(selected, current_prompt):
+                    if not selected or selected in ('📋 Wildcards', '📋'):
+                        return gr.update(), '📋 Wildcards'
+                    
+                    tag = selected.strip()
+                    if not tag.startswith('__'):
+                        tag = f'__{tag}__'
+                    
+                    tag_str = f'{tag}, '
+                    if current_prompt and len(current_prompt.strip()) > 0:
+                        cp = current_prompt.rstrip()
+                        if not cp.endswith((',', ' ')):
+                            new_prompt = cp + ', ' + tag_str
+                        else:
+                            new_prompt = cp + ' ' + tag_str
+                    else:
+                        new_prompt = tag_str
+                        
+                    return new_prompt, '📋 Wildcards'
+
+                wildcard_dropdown.change(
+                    fn=add_wildcard_to_prompt,
+                    inputs=[wildcard_dropdown, prompt],
+                    outputs=[prompt, wildcard_dropdown],
+                    queue=False, show_progress=False
+                )
 
                     def stop_clicked(currentTask):
                         import ldm_patched.modules.model_management as model_management

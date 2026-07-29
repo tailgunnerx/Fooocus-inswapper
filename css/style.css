@@ -506,3 +506,26 @@ html.dark-mode #dark_mode_btn {
     background-color: #4b5563 !important;
     border-color: #6b7280 !important;
 }
+
+/* ── Wildcard Dropdown List Button (Left side of Pos Prompt) ──────────────── */
+#wildcard_col {
+    min-width: 110px !important;
+    max-width: 140px !important;
+    align-self: flex-start !important;
+    margin-top: 2px !important;
+}
+
+#wildcard_dropdown {
+    width: 100% !important;
+}
+
+#wildcard_dropdown input,
+#wildcard_dropdown select,
+#wildcard_dropdown .wrap {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 6px 8px !important;
+    height: 38px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+}
