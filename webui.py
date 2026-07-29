@@ -244,7 +244,7 @@ with shared.gradio_root:
                                  elem_classes=['resizable_area', 'main_view', 'final_gallery', 'image_gallery'],
                                  elem_id='final_gallery')
             with gr.Row():
-                with gr.Column(scale=1, min_width=480, elem_id='wildcard_col'):
+                with gr.Column(scale=1, min_width=50, elem_id='wildcard_col'):
                     def get_wildcard_tags():
                         try:
                             files = modules.config.get_files_from_folder(modules.config.path_wildcards, ['.txt'])
@@ -263,6 +263,40 @@ with shared.gradio_root:
                             container=False,
                             elem_id="wildcard_checkboxes"
                         )
+
+                    # JS to reposition accordion popout as fixed overlay
+                    gr.HTML(value="""<script>
+(function() {
+    function setupWildcardPopout() {
+        var acc = document.getElementById('wildcard_accordion');
+        if (!acc) { setTimeout(setupWildcardPopout, 500); return; }
+        var observer = new MutationObserver(function() {
+            if (acc.hasAttribute('open') || acc.open) {
+                var col = document.getElementById('wildcard_col');
+                var rect = col ? col.getBoundingClientRect() : {top: 80, left: 10};
+                acc.style.position = 'fixed';
+                acc.style.top = rect.top + 'px';
+                acc.style.left = rect.left + 'px';
+                acc.style.width = '480px';
+                acc.style.minWidth = '480px';
+                acc.style.maxWidth = '480px';
+                acc.style.zIndex = '9999999';
+            } else {
+                acc.style.position = '';
+                acc.style.top = '';
+                acc.style.left = '';
+                acc.style.width = '';
+                acc.style.minWidth = '';
+                acc.style.maxWidth = '';
+                acc.style.zIndex = '';
+            }
+        });
+        observer.observe(acc, {attributes: true, attributeFilter: ['open']});
+    }
+    if (document.readyState === 'complete') setupWildcardPopout();
+    else window.addEventListener('load', setupWildcardPopout);
+})();
+</script>""", visible=False)
 
                 with gr.Column(scale=16):
                     prompt = gr.Textbox(label="+ Positive Prompt:", show_label=True, placeholder="Type prompt here or paste parameters.", elem_id='positive_prompt',
