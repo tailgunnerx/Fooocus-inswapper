@@ -1169,8 +1169,11 @@ def worker():
         denoising_strength = 1.0
         tiled = False
 
-        width, height = async_task.aspect_ratios_selection.replace('×', ' ').split(' ')[:2]
-        width, height = int(width), int(height)
+        try:
+            width, height = async_task.aspect_ratios_selection.replace('×', ' ').split(' ')[:2]
+            width, height = int(width), int(height)
+        except Exception:
+            width, height = 1152, 896
 
         skip_prompt_processing = False
 

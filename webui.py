@@ -855,14 +855,14 @@ with shared.gradio_root:
                                                  elem_classes=['performance_selection'])
 
                 with gr.Accordion(label='Aspect Ratios', open=False, elem_id='aspect_ratios_accordion') as aspect_ratios_accordion:
+                    custom_aspect_ratio_label = 'Custom'
+                    aspect_ratio_choices = modules.config.available_aspect_ratios_labels + [custom_aspect_ratio_label]
+
                     aspect_ratios_selection = gr.Radio(label='Aspect Ratios', show_label=False,
-                                                       choices=modules.config.available_aspect_ratios_labels,
+                                                       choices=aspect_ratio_choices,
                                                        value=modules.config.default_aspect_ratio,
                                                        info='width × height',
                                                        elem_classes='aspect_ratios')
-
-                    aspect_ratios_selection.change(lambda x: None, inputs=aspect_ratios_selection, queue=False, show_progress=False, _js='(x)=>{refresh_aspect_ratios_label(x);}')
-                    shared.gradio_root.load(lambda x: None, inputs=aspect_ratios_selection, queue=False, show_progress=False, _js='(x)=>{refresh_aspect_ratios_label(x);}')
 
                     # ── Custom dimensions ────────────────────────────────────
                     gr.HTML('<div style="margin-top:10px;font-size:0.85em;color:#888;font-weight:600;">'
@@ -896,6 +896,17 @@ with shared.gradio_root:
                         msg = (f'<span style="color:#4ade80;">'
                                f'✓ Custom size set: {w_snapped}×{h_snapped}{warn}</span>')
                         return w_snapped, h_snapped, msg
+
+                    def apply_custom_size_click(w, h):
+                        w_snapped, h_snapped, msg = apply_custom_size(w, h)
+                        return w_snapped, h_snapped, msg, custom_aspect_ratio_label
+
+                    def aspect_ratios_selection_change(selected_ratio, custom_w, custom_h):
+                        if selected_ratio == custom_aspect_ratio_label:
+                            w_snapped, h_snapped, msg = apply_custom_size(custom_w, custom_h)
+                            return w_snapped, h_snapped, msg
+                        else:
+                            return -1, -1, ''
 
                     # NOTE: apply_custom_size_btn.click() is wired below, after
                     # overwrite_width / overwrite_height are defined in the dev tools section.
@@ -1065,12 +1076,27 @@ with shared.gradio_root:
                                                      info='Set as -1 to disable. For developer debugging. '
                                                           'Results will be worse for non-standard numbers that SDXL is not trained on.')
 
-                        # ── Wire the custom size button (defined in Aspect Ratios accordion above) ──
+                        # ── Wire the custom size button & aspect ratio selection ──
                         apply_custom_size_btn.click(
-                            fn=apply_custom_size,
+                            fn=apply_custom_size_click,
                             inputs=[custom_width, custom_height],
+                            outputs=[overwrite_width, overwrite_height, custom_size_status, aspect_ratios_selection],
+                            queue=False, show_progress=False
+                        ).then(
+                            lambda x: None, inputs=aspect_ratios_selection, queue=False, show_progress=False, _js='(x)=>{refresh_aspect_ratios_label(x);}'
+                        )
+
+                        aspect_ratios_selection.change(
+                            fn=aspect_ratios_selection_change,
+                            inputs=[aspect_ratios_selection, custom_width, custom_height],
                             outputs=[overwrite_width, overwrite_height, custom_size_status],
                             queue=False, show_progress=False
+                        ).then(
+                            lambda x: None, inputs=aspect_ratios_selection, queue=False, show_progress=False, _js='(x)=>{refresh_aspect_ratios_label(x);}'
+                        )
+
+                        shared.gradio_root.load(
+                            lambda x: None, inputs=aspect_ratios_selection, queue=False, show_progress=False, _js='(x)=>{refresh_aspect_ratios_label(x);}'
                         )
 
                         overwrite_vary_strength = gr.Slider(label='Forced Overwrite of Denoising Strength of "Vary"',
