@@ -850,24 +850,18 @@ html.dark-mode #generate_button:hover * {
     color: #ffffff !important;
 }
 
-/* Fix flashing image preview during generation in dark mode */
+/* Completely remove pulsing/flashing from image preview during generation in dark mode */
 html.dark-mode .generating,
 html.dark-mode .preview.generating,
-html.dark-mode .media-wrapper.generating {
-    animation: dark-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+html.dark-mode .media-wrapper.generating,
+html.dark-mode .gallery-item.generating {
+    animation: none !important;
+    opacity: 1 !important;
 }
 
-@keyframes dark-pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.4;
-    }
-}
-
-/* Smooth out the image updates */
+/* Keep smooth image transition for frame updates */
 html.dark-mode .preview img,
-html.dark-mode .media-wrapper img {
+html.dark-mode .media-wrapper img,
+html.dark-mode .gallery-item img {
     transition: opacity 0.2s ease-in-out;
 }
