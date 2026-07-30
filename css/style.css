@@ -658,7 +658,7 @@ html.dark-mode ::selection {
     flex: 0 0 50px !important;
     overflow: visible !important;
     position: relative !important;
-    z-index: 99999 !important;
+    z-index: 900 !important;
 }
 
 /* Accordion: absolute position escapes flex constraints. Width auto-expands via max-content */
@@ -666,14 +666,14 @@ html.dark-mode ::selection {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    border: 1px solid #d1d5db !important;
-    border-radius: 8px !important;
-    background: #ffffff !important;
     padding: 0 !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
     min-width: 48px !important;
     width: max-content !important; /* Shrinks to button when closed, expands to checkboxes when open */
     max-width: 480px !important;
-    z-index: 999999 !important;
+    z-index: 901 !important;
     overflow: visible !important;
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
@@ -848,20 +848,4 @@ html.dark-mode #generate_button:hover * {
     background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
     background-color: #ea580c !important;
     color: #ffffff !important;
-}
-
-/* Completely remove pulsing/flashing from image preview during generation in dark mode */
-html.dark-mode .generating,
-html.dark-mode .preview.generating,
-html.dark-mode .media-wrapper.generating,
-html.dark-mode .gallery-item.generating {
-    animation: none !important;
-    opacity: 1 !important;
-}
-
-/* Keep smooth image transition for frame updates */
-html.dark-mode .preview img,
-html.dark-mode .media-wrapper img,
-html.dark-mode .gallery-item img {
-    transition: opacity 0.2s ease-in-out;
 }
