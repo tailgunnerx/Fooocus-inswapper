@@ -849,3 +849,8 @@ html.dark-mode #generate_button:hover * {
     background-color: #ea580c !important;
     color: #ffffff !important;
 }
+
+/* Disable the default Gradio pulse animation in dark mode to match light mode's behavior */
+html.dark-mode .generating {
+    animation: none !important;
+}
